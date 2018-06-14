@@ -5,6 +5,32 @@ var bodyParser = require('body-parser');
 var graphqlHTTP = require('express-graphql');
 var { buildSchema } = require('graphql');
 
+var fakeDatabase = {};
+
+var JWT_SECRET = 'LISTEN! the password is ...'; 
+var jwtMiddleware = jwt({ secret: JWT_SECRET }).unless({ path: ['/auth'] });
+var bodyParserMiddleware = bodyParser.json();
+
+var logginMiddleware = (request, resolver, next) => {
+  console.log('ip:', request.ip);
+  next();
+};
+
+var handlingErrorMiddleware = (error, request, resolver, next) => {
+  if (error.name === 'UnauthorizedError') {
+    resolver.status(401).send('invalid token...');
+  }
+  next();
+};
+
+var app = express();
+app.use([
+  bodyParserMiddleware,
+  logginMiddleware,
+  jwtMiddleware,
+  handlingErrorMiddleware,
+]);
+
 // Construct a schema, using GraphQL schema language
 var schema = buildSchema(`
   type RandomDie {
@@ -59,8 +85,6 @@ class Message {
   }
 }
 
-var fakeDatabase = {};
-
 // The root provides a resolver function for each API endpoint
 var root = {
   ip: (args, request) => request.ip,
@@ -81,33 +105,6 @@ var root = {
     return new Message(id, input);
   },
 };
-
-var app = express();
-
-var logginMiddleware = (request, resolver, next) => {
-  console.log('ip:', request.ip);
-  next();
-};
-
-var handlingErrorMiddleware = (error, request, resolver, next) => {
-  if (error.name === 'UnauthorizedError') {
-    resolver.status(401).send('invalid token...');
-  }
-  next();
-};
-
-var JWT_SECRET = 'I love Nunan'; 
-
-var jwtMiddleware = jwt({ secret: JWT_SECRET }).unless({ path: ['/auth'] });
-
-var bodyParserMiddleware = bodyParser.json();
-
-app.use([
-  bodyParserMiddleware,
-  logginMiddleware,
-  jwtMiddleware,
-  handlingErrorMiddleware,
-]);
 
 app.use('/graphql', graphqlHTTP({
   schema: schema,
