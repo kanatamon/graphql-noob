@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -L index.js"
+    "start": "nodemon -L lib/index.js --exec babel-node",
+    "build": "babel -d dist lib"
   },
   "keywords": [],
   "author": "Kantapon Sritiyot",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",

@@ -1,9 +1,9 @@
-var express = require('express');
-var jwt = require('express-jwt');
-var jwtWebToken = require('jsonwebtoken');
-var bodyParser = require('body-parser');
-var graphqlHTTP = require('express-graphql');
-var { buildSchema } = require('graphql');
+import express from 'express';
+import jwt from 'express-jwt';
+import jwtWebToken from 'jsonwebtoken';
+import bodyParser from 'body-parser';
+import graphqlHTTP from 'express-graphql';
+import { buildSchema } from 'graphql';
 
 var fakeDatabase = {};
 
