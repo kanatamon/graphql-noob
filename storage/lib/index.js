@@ -7,7 +7,7 @@ import {
   GraphQLObjectType,
 } from 'graphql';
 import { getJokes } from './joke/api';
-import JokeType from './joke/schema';
+import JokeType from './joke/type';
 
 const PORT = 3000;
 
