@@ -17,11 +17,11 @@ const rootSchema = new GraphQLSchema({
     fields: {
       jokes: {
         type: new GraphQLList(JokeType),
-        resolve: () => getJokes().then(_ => {
-          if (_.error) {
-            throw _.error;
+        resolve: _ => getJokes().then(result => {
+          if (result.error) {
+            throw result.error;
           }
-          return _.data
+          return result.data;
         }),
       }
     },
