@@ -41,7 +41,6 @@ app.get('/graphql', (req, res) => {
   if (!graphqlQuery) {
     return res.status(500).send('You must provide a query');
   }
-  console.log(graphqlQuery);
   return graphql(rootSchema, graphqlQuery)
     .then(response => response.data)
     .then((data) => res.json(data))
