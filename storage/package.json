@@ -22,6 +22,7 @@
     "jsonwebtoken": "^8.2.2"
   },
   "devDependencies": {
+    "jest": "^23.1.0",
     "nodemon": "^1.17.5"
   }
 }

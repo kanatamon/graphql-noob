@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLID, GraphQLString } from 'graphql';
+import { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList } from 'graphql';
 import { getJokes } from './api';
 
 const JokeType = new GraphQLObjectType({
@@ -13,4 +13,17 @@ const JokeType = new GraphQLObjectType({
   },
 });
 
-export default JokeType;
+const JokesSchema = {
+  type: new GraphQLList(JokeType),
+  resolve: _ => getJokes().then(result => {
+    if (result.error) {
+      throw new Error(result.error);
+    }
+    return result.data;
+  }),
+};
+
+export {
+  JokeType,
+  JokesSchema,
+};
