@@ -1,8 +1,6 @@
 import { JokeType, JokesResolver } from './type';
 import { GraphQLID, GraphQLString } from 'graphql';
-import { getJokes } from './api';
-
-jest.mock('./api');
+import * as jokeApi from './api';
 
 describe('JokeType', () => {
   test('should have `id` field of type ID', () => {
@@ -17,24 +15,36 @@ describe('JokeType', () => {
 });
 
 describe('JokesResolver.resolve', () => {
+  let originalGetJokes;
+  beforeEach(() => {
+    // Save the original implementation
+    originalGetJokes = jokeApi.getJokes;
+  });
+
   afterEach(() => {
-    jest.resetAllMocks();
+    // Restore to the original
+    jokeApi.getJokes = originalGetJokes;
   });
 
   test('should call `getJokes`', async () => {
-    getJokes.mockResolvedValue({ data: [], error: null });
+    const metadata = { calls: [] };
+    jokeApi.getJokes = (...args) => {
+      metadata.calls.push(args);
+      return Promise.resolve({ data: [], error: null });
+    };
     await JokesResolver.resolve();
-    expect(getJokes).toHaveBeenCalled();
+    expect(metadata.calls).toHaveLength(1);
   });
 
   test('should resovle a list of data when `getJokes` resovled `{ ..., error: null }`', async () => {
-    getJokes.mockResolvedValue({ data: [], error: null });
-    await expect(JokesResolver.resolve()).resolves.toEqual([]);
+    jokeApi.getJokes = () => Promise.resolve({ data: [], error: null });
+    const result = await JokesResolver.resolve();
+    expect(result).toEqual([]);
   });
 
   test('should throw an error when `getJokes` resolved `{ ..., error: any }`', async () => {
     const error = 'An error occured';
-    getJokes.mockResolvedValue({ error });
+    jokeApi.getJokes = () => Promise.resolve({ error });
     await expect(JokesResolver.resolve()).rejects.toThrow(error);
   });
 });
