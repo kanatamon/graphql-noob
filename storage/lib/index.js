@@ -6,7 +6,7 @@ import {
   GraphQLList,
   GraphQLObjectType,
 } from 'graphql';
-import { JokesSchema } from './joke/type';
+import { JokesResolver } from './joke/type';
 
 const PORT = 3000;
 
@@ -14,7 +14,7 @@ const rootSchema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: {
-      jokes: JokesSchema,
+      jokes: JokesResolver,
     },
   })
 });

@@ -13,7 +13,7 @@ const JokeType = new GraphQLObjectType({
   },
 });
 
-const JokesSchema = {
+const JokesResolver = {
   type: new GraphQLList(JokeType),
   resolve: _ => getJokes().then(result => {
     if (result.error) {
@@ -25,5 +25,5 @@ const JokesSchema = {
 
 export {
   JokeType,
-  JokesSchema,
+  JokesResolver,
 };

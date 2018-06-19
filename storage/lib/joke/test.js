@@ -1,4 +1,4 @@
-import { JokeType, JokesSchema } from './type';
+import { JokeType, JokesResolver } from './type';
 import { GraphQLID, GraphQLString } from 'graphql';
 import { getJokes } from './api';
 
@@ -16,25 +16,25 @@ describe('JokeType', () => {
   });
 });
 
-describe('JokesSchema.resolve', () => {
+describe('JokesResolver.resolve', () => {
   afterEach(() => {
     jest.resetAllMocks();
   });
 
   test('should call `getJokes`', async () => {
     getJokes.mockResolvedValue({ data: [], error: null });
-    await JokesSchema.resolve();
+    await JokesResolver.resolve();
     expect(getJokes).toHaveBeenCalled();
   });
 
   test('should resovle a list of data when `getJokes` resovled `{ ..., error: null }`', async () => {
     getJokes.mockResolvedValue({ data: [], error: null });
-    await expect(JokesSchema.resolve()).resolves.toEqual([]);
+    await expect(JokesResolver.resolve()).resolves.toEqual([]);
   });
 
   test('should throw an error when `getJokes` resolved `{ ..., error: any }`', async () => {
     const error = 'An error occured';
     getJokes.mockResolvedValue({ error });
-    await expect(JokesSchema.resolve()).rejects.toThrow(error);
+    await expect(JokesResolver.resolve()).rejects.toThrow(error);
   });
 });
