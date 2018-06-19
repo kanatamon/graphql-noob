@@ -40,3 +40,5 @@ npm init -y && npm install --save graphql express express-graphql
 - Restart docker to fix [Error starting userland proxy: mkdir /port/tcp:0.0.0.0:3000:tcp:172.17.0.2:3000: input/output error](https://github.com/docker/for-win/issues/573)
 
 - Use the ```npx nodemon -L index.js``` to fix [Application isn't restarting](https://github.com/remy/nodemon#application-isnt-restarting) due to some problem in networked environments (container running nodemon reading across a mounted drive)
+
+- Add ```testEnvironment: 'node'``` to Jest's configuration to fix [Cross origin null forbidden: Axios tries to make an xhr request in a Node environment, instead of an http request](https://github.com/axios/axios/issues/1418). It's issue due to Jest default environment is a browser-like but this app is builded in Node environment
