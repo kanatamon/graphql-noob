@@ -1,23 +1,9 @@
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
-import {
-  graphql,
-  GraphQLSchema,
-  GraphQLList,
-  GraphQLObjectType,
-} from 'graphql';
-import { JokesResolver } from './joke/type';
+import { graphql } from 'graphql';
+import rootSchema from './rootSchema';
 
 const PORT = 3000;
-
-const rootSchema = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'Query',
-    fields: {
-      jokes: JokesResolver,
-    },
-  })
-});
 
 const app = express();
 
