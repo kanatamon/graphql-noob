@@ -15,36 +15,32 @@ describe('JokeType', () => {
 });
 
 describe('JokesResolver.resolve', () => {
-  let originalGetJokes;
-  beforeEach(() => {
-    // Save the original implementation
-    originalGetJokes = jokeApi.getJokes;
-  });
-
+  const spy = jest.spyOn(jokeApi, 'getJokes');
+  
   afterEach(() => {
-    // Restore to the original
-    jokeApi.getJokes = originalGetJokes;
+    // Reset all mocked during a test
+    spy.mockReset();
+  });
+  
+  afterAll(() => {
+    // Restore to the original implementation
+    spy.mockRestore();
   });
 
   test('should call `getJokes`', async () => {
-    const metadata = { calls: [] };
-    jokeApi.getJokes = (...args) => {
-      metadata.calls.push(args);
-      return Promise.resolve({ data: [], error: null });
-    };
+    jokeApi.getJokes.mockResolvedValue({ data: [], error: null });
     await JokesResolver.resolve();
-    expect(metadata.calls).toHaveLength(1);
+    expect(jokeApi.getJokes).toHaveBeenCalled();
   });
 
   test('should resovle a list of data when `getJokes` resovled `{ ..., error: null }`', async () => {
-    jokeApi.getJokes = () => Promise.resolve({ data: [], error: null });
-    const result = await JokesResolver.resolve();
-    expect(result).toEqual([]);
+    jokeApi.getJokes.mockResolvedValue({ data: [], error: null });
+    await expect(JokesResolver.resolve()).resolves.toEqual([]);
   });
 
   test('should throw an error when `getJokes` resolved `{ ..., error: any }`', async () => {
     const error = 'An error occured';
-    jokeApi.getJokes = () => Promise.resolve({ error });
+    jokeApi.getJokes.mockResolvedValue({ error });
     await expect(JokesResolver.resolve()).rejects.toThrow(error);
   });
 });
