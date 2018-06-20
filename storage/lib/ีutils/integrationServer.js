@@ -3,14 +3,15 @@ import graphqlHTTP from 'express-graphql';
 import rootSchema from '../rootSchema';
 import axios from 'axios';
 
-function start(appPort, done) {
+function start(appPort, done = () => null) {
   const app = express();
   const PORT = appPort || 3000;
-
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  
   app.use('/graphql', graphqlHTTP({
     schema: rootSchema,
-    pretty: true,
-    graphiql: true,
+    pretty: isDevelopment,
+    graphiql: isDevelopment,
   }));
 
   return app.listen(PORT, () => {
