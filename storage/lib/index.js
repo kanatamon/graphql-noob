@@ -1,4 +1,4 @@
-import { start } from './ีutils/integrationServer';
+import { start } from './utils/integrationServer';
 
 const PORT = process.env.PORT || 3000;
 
