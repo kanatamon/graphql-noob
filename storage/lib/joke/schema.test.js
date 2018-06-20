@@ -1,4 +1,4 @@
-import { JokeType, JokesResolver } from './type';
+import { JokeType, JokesResolver } from './schema';
 import { GraphQLID, GraphQLString } from 'graphql';
 import * as jokeApi from './api';
 
