@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon -L lib/index.js --exec babel-node",
-    "build": "babel -d dist lib"
+    "build": "babel -d dist lib",
+    "test": "jest"
   },
   "keywords": [],
   "author": "Kantapon Sritiyot",
